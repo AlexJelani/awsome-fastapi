@@ -6,8 +6,8 @@ WORKDIR /app
 
 # Install system dependencies if needed, 
 # not supported by Nexus unfortunately
+# Debian 11 (bullseye) is EOL; its security repo permanently 404s, so skip apt upgrade.
 RUN apt-get update -y
-RUN apt upgrade -y
 
 # Install Python dependencies
 COPY requirements.txt .
