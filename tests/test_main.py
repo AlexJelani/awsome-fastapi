@@ -116,3 +116,15 @@ def test_secure_data_with_invalid_token():
     response = client.get("/secure-data", params={"token": "wrong_token"})
     assert response.status_code == 403
     assert response.json() == {"message": "Forbidden"}
+
+
+def test_metrics_endpoint():
+    """
+    Test the `/metrics` endpoint.
+
+    Ensures the app exposes Prometheus metrics in the expected format.
+    """
+    response = client.get("/metrics")
+    assert response.status_code == 200
+    assert "# HELP" in response.text
+    assert "# TYPE" in response.text

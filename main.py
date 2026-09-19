@@ -8,7 +8,8 @@ for educational purposes.
 """
 
 from fastapi import FastAPI, HTTPException, Query, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
+from prometheus_client import CONTENT_TYPE_LATEST, REGISTRY, generate_latest
 
 app = FastAPI()
 
@@ -25,6 +26,17 @@ def index():
         dict: A JSON object containing a greeting message.
     """
     return {"message": "Hello World!"}
+
+
+@app.get("/metrics")
+def metrics():
+    """
+    Expose Prometheus metrics for monitoring systems such as Prometheus and Grafana.
+
+    Returns:
+        Response: Prometheus-formatted metrics output.
+    """
+    return Response(generate_latest(REGISTRY), media_type=CONTENT_TYPE_LATEST)
 
 
 @app.get("/users")
