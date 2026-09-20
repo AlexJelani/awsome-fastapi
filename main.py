@@ -10,8 +10,13 @@ for educational purposes.
 from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.responses import JSONResponse, Response
 from prometheus_client import CONTENT_TYPE_LATEST, REGISTRY, generate_latest
+from prometheus_fastapi_instrumentator import Instrumentator
 
 app = FastAPI()
+
+# Registers http_requests_total and http_request_duration_seconds_* into the
+# default registry, which the /metrics endpoint below exports.
+Instrumentator().instrument(app)
 
 # Example of hardcoded secrets
 API_SECRET = "1234567890"

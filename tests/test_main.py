@@ -128,3 +128,17 @@ def test_metrics_endpoint():
     assert response.status_code == 200
     assert "# HELP" in response.text
     assert "# TYPE" in response.text
+
+
+def test_http_request_metrics():
+    """
+    Test that HTTP request instrumentation is exposed via `/metrics`.
+
+    Makes a request first, then ensures the instrumentator's counters and
+    latency histogram are present in the exported metrics.
+    """
+    client.get("/")
+    response = client.get("/metrics")
+    assert response.status_code == 200
+    assert "http_requests_total" in response.text
+    assert "http_request_duration_seconds_bucket" in response.text
